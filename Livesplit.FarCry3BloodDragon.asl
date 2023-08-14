@@ -1,40 +1,48 @@
-// Special thanks to OrdinaryNimda for splitting logic, Ero for optimizing it and helping with bug fixes, and also thanks to Marjn, M_E_T_A_L_I_S_T___S_P_1_D, and AlexYeahNot.
+// Special thanks to OrdinaryNimda for splitting logic, Ero for optimizing it and helping with bug fixes, and also thanks to Marjn, M_E_T_A_L_I_S_T___S_P_1_D, AlexYeahNot and Cash Mayo.
 // Changelog
 // 15.07.23: Started making ASL and figured out how MD5 Hash works with the help of Speedrunning Tools Discord.
 // 16.07.23: Added Uplay MD5 Hash 1.5 from Alex's version, tested by Marjn.
 // 17.07.23: Found all DX11 pointers and finished writing the ASL. Now the code can be reused.
 // 18.07.23: Added DX9 1.5 support, fixed the loading pointer for DX11 1.5 as it didn't work for M_E_T_A_L_I_S_T___S_P_1_D. Also fixed the issue with side quests and Garrison splitting logic because they couldn't be completed during a loading screen.
-// 21.07.23: Added Full Ubisoft Connect support, fixed load pointer for it
+// 21.07.23: Added Full Ubisoft Connect support, fixed load pointer for it.
+// 13.08.23: Figured out Ghidra, start and final split figured out for Steam DX11 & DX9. Optimized addresses and reused them where it's possible.
+// 14.08.23: Found better value for Start, start with 1, cutscene 2. Feels a ton more accurate.
 
 // Steam
 
-state("fc3_blooddragon", "DX9 Steam 1.5")
+state("fc3_blooddragon", "DX9 Steam (29.11.21)")
 {
-    int PassedMissions : "FC3.dll", 0x012D5544, 0x24, 0x10, 0x1C, 0x50, 0x10;
+    int PassedMissions : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x50, 0x10;
     int LiberatedGarisons : "FC3.dll", 0x01888A10, 0xC0;
-    int PassedPredator : "FC3.dll", 0x01873E7C, 0x90, 0x1C, 0x50, 0x160;
+    int PassedPredator : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x50, 0x160;
     int PassedHostage : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x50, 0x150;
     int Loading : "FC3.dll", 0x018435A4, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3.dll", 0x018D41C8, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3.dll", 0x018D41C8, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
 }
 
-state("fc3_blooddragon_d3d11", "DX11 Steam 1.5")
+state("fc3_blooddragon_d3d11", "DX11 Steam (29.11.21)")
 {
-    int PassedMissions : "FC3_d3d11.dll", 0x018833C8, 0x10, 0x1C, 0x50, 0x10;
+    int PassedMissions : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x50, 0x10;
     int LiberatedGarisons : "FC3_d3d11.dll", 0x01898C50, 0xC0;
-    int PassedPredator : "FC3_d3d11.dll", 0x0189A230, 0x10, 0x1C, 0x50, 0x160;
-    int PassedHostage : "FC3_d3d11.dll", 0x018833C8, 0x10, 0x1C, 0x50, 0x150;
+    int PassedPredator : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x50, 0x160;
+    int PassedHostage : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x50, 0x150;
     int Loading : "FC3_d3d11.dll", 0x018537D4, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3_d3d11.dll", 0x018E4408, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3_d3d11.dll", 0x018E4408, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
 }
 
 // Ubisoft Connect
 
-state("fc3_blooddragon_d3d11", "Ubisoft Connect 1.5")
+state("fc3_blooddragon_d3d11", "Connect (29.11.21)")   
 {
-    int PassedMissions : "FC3_d3d11.dll", 0x01E7B13C, 0x90, 0x41C, 0x50, 0x10;
+    int PassedMissions : "FC3_d3d11.dll", 0x01EA8BA8, 0x10, 0x1C, 0x50, 0x10;
     int LiberatedGarisons : "FC3_d3d11.dll", 0x01EA8BA8, 0xC0;
-    int PassedPredator : "FC3_d3d11.dll", 0x01E7A448, 0x10, 0x1C, 0x50, 0x160;
+    int PassedPredator : "FC3_d3d11.dll", 0x01EA8BA8, 0x10, 0x1C, 0x50, 0x160;
     int PassedHostage : "FC3_d3d11.dll", 0x01EA8BA8, 0x10, 0x1C, 0x50, 0x150;
-    int Loading : "FC3_d3d11.dll", 0x01E4908C, 0x14, 0xC, 0x70, 0x8;
+    int Loading : "FC3_d3d11.dll", 0x01E4908C, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3_d3d11.dll", 0x01F240B0, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3_d3d11.dll", 0x01F240B0, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
 }
 
 startup
@@ -46,7 +54,7 @@ startup
     settings.Add("mission4", true, "What Is This Shit?", "missions");
     settings.Add("mission5", true, "I Don't Deal With Psychos. I Put 'Em Away", "missions");
     settings.Add("mission6", true, "Summon The Plague", "missions");
-    settings.Add("mission7", false, "I Must Break You (Check rules to manually end the run)", "missions");
+    settings.Add("mission7", true, "I Must Break You", "missions");
     settings.Add("garison", true, "Split when liberating a Garison:");
     settings.Add("garison1", false, "Garison 1", "garison");
     settings.Add("garison2", false, "Garison 2", "garison");
@@ -104,12 +112,19 @@ init
 
     // Set game version according to hash
     switch (MD5Hash){
-        case "7A1169F819C39ACA584AB2B8EE4A1D4E": version = "DX9 Steam 1.5"; break;
-        case "A64723A58759D92F9C7B11ECE257A361": version = "DX11 Steam 1.5"; break;
-        case "F9EEEB7309144276C34257C91E6C4875": version = "Ubisoft Connect 1.5"; break;
+        case "7A1169F819C39ACA584AB2B8EE4A1D4E": version = "DX9 Steam (29.11.21)"; break;
+        case "A64723A58759D92F9C7B11ECE257A361": version = "DX11 Steam (29.11.21)"; break;
+        case "F9EEEB7309144276C34257C91E6C4875": version = "Connect (29.11.21)"; break;
 
         default: version = "Unknown Version"; break;
     }
+}
+
+start
+{
+    return
+    current.InACutsceneStart == 1 && old.InACutsceneStart == 2
+      && current.PassedMissions == 0 && current.Loading == 0;
 }
 
 split
@@ -118,6 +133,8 @@ return
     current.PassedMissions == old.PassedMissions + 1
       && current.PassedMissions > 0 && current.PassedMissions < 7
       && settings["mission" + current.PassedMissions]
+    || old.InACutsceneFinal == 1 && current.InACutsceneFinal == 0
+    && current.PassedMissions == 6 && settings["mission7"]
     || current.LiberatedGarisons == old.LiberatedGarisons + 1
       && current.LiberatedGarisons > 0 && current.LiberatedGarisons < 13 && current.Loading == 0
       && settings["garison" + current.LiberatedGarisons]
