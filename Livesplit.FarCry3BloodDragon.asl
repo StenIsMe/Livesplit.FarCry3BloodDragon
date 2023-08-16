@@ -7,7 +7,7 @@
 // 21.07.23: Added Full Ubisoft Connect support, fixed load pointer for it.
 // 13.08.23: Figured out Ghidra, start and final split figured out for Steam DX11 & DX9. Optimized addresses and reused them where it's possible.
 // 14.08.23: Found better value for Start, start with 1, cutscene 2. Feels a ton more accurate. Collectables splitting implemented, requested by AlexYeahNot. 1 May, 2013 version made.
-// 15.08.23: init MD5Hash rewrite to make a check for specifically "FC3.dll" & "FC3_dd3d11" MD5 Hash, because exe one does not work like intended, it has a match MD5 with 2021 verison even tho it has diffrent pointers.
+// 15.08.23: init MD5Hash rewrite to make a check for specifically "FC3.dll" & "FC3_d3d11.dll" MD5 Hash, because exe one does not work like intended, it has a match MD5 with 2021 verison even tho it has diffrent pointers.
 // 16.08.23: did all the versions of the game pretty much, besides dx11 "test_ch".
 
 // Steam
@@ -277,7 +277,7 @@ using (FileStream gameProcess = File.Open(modules.First().FileName, FileMode.Ope
         using (FileStream gameProcessDLL = File.Open(gameProcesProcessDirectory + "\\" + (gameProcessName[gameProcessName.Length - 1] == '1' ? "FC3_d3d11.dll" : "FC3.dll"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
           string MD5Hash = md5.ComputeHash(gameProcessDLL).Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
           
-          //System.Windows.Forms.Clipboard.SetDataObject(MD5Hash); uncomment if you have encontered "Unknown Version" and send to "Vlad2D" in Discord with dll files of "FC3d3d.dll" and "FC3.dll".
+          //System.Windows.Forms.Clipboard.SetDataObject(MD5Hash); uncomment if you have encontered "Unknown Version" and send to "Vlad2D" in Discord with dll files of "FC3_d3d11.dll" and "FC3.dll".
           switch (MD5Hash) {
             case "D0E7782B31CDE5E4FF57D808C202D2CF": version = "Server Fix DX9"; break;
             case "0DAC3F3BE0793DC6C3F639A8A788D625": version = "Server Fix DX11"; break;
