@@ -1,4 +1,4 @@
-// Special thanks to OrdinaryNimda for splitting logic, Ero for optimizing it and helping with bug fixes, and also thanks to Marjn, M_E_T_A_L_I_S_T___S_P_1_D, AlexYeahNot and Cash Mayo.
+// Special thanks to OrdinaryNimda for splitting logic, Ero for optimizing it and helping with bug fixes, and also thanks to Marjn, M_E_T_A_L_I_S_T___S_P_1_D, AlexYeahNot, Cash Mayo, Sviat (Discord — .sviat; Sviat#2430) for remaking MD5Hash graber for DLL files of the game.
 // Changelog
 // 15.07.23: Started making ASL and figured out how MD5 Hash works with the help of Speedrunning Tools Discord.
 // 16.07.23: Added Uplay MD5 Hash 1.5 from Alex's version, tested by Marjn.
@@ -6,11 +6,13 @@
 // 18.07.23: Added DX9 1.5 support, fixed the loading pointer for DX11 1.5 as it didn't work for M_E_T_A_L_I_S_T___S_P_1_D. Also fixed the issue with side quests and Garrison splitting logic because they couldn't be completed during a loading screen.
 // 21.07.23: Added Full Ubisoft Connect support, fixed load pointer for it.
 // 13.08.23: Figured out Ghidra, start and final split figured out for Steam DX11 & DX9. Optimized addresses and reused them where it's possible.
-// 14.08.23: Found better value for Start, start with 1, cutscene 2. Feels a ton more accurate. Collectables splitting implemented, requested by AlexYeahNot.
+// 14.08.23: Found better value for Start, start with 1, cutscene 2. Feels a ton more accurate. Collectables splitting implemented, requested by AlexYeahNot. 1 May, 2013 version made.
+// 15.08.23: init MD5Hash rewrite to make a check for specifically "FC3.dll" & "FC3_dd3d11" MD5 Hash, because exe one does not work like intended, it has a match MD5 with 2021 verison even tho it has diffrent pointers.
+// 16.08.23: did all the versions of the game pretty much, besides dx11 "test_ch".
 
 // Steam
 
-state("fc3_blooddragon", "DX9 Steam (29.11.21)")
+state("fc3_blooddragon", "Server Fix DX9")
 {
     int PassedMissions : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x50, 0x10;
     int LiberatedGarisons : "FC3.dll", 0x01888A10, 0xC0;
@@ -24,7 +26,105 @@ state("fc3_blooddragon", "DX9 Steam (29.11.21)")
     int InACutsceneFinal : "FC3.dll", 0x018D41C8, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
 }
 
-state("fc3_blooddragon_d3d11", "DX11 Steam (29.11.21)")
+state("fc3_blooddragon_d3d11", "Server Fix DX11")
+{
+    int PassedMissions : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x50, 0x10;
+    int LiberatedGarisons : "FC3_d3d11.dll", 0x01898C50, 0xC0;
+    int PassedPredator : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x50, 0x160;
+    int PassedHostage : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x50, 0x150;
+    int TV : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x10, 0x30, 0x10, 0xC4, 0x118;
+    int Notes : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x10, 0x3C, 0x10, 0xC4, 0x120;
+    int VHS : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x10, 0x64, 0x10, 0xC4, 0x11C;
+    int Loading : "FC3_d3d11.dll", 0x018537D4, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3_d3d11.dll", 0x018E4408, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3_d3d11.dll", 0x018E4408, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
+}
+
+state("fc3_blooddragon", "DX9 Steam (01.05.2013)")
+{
+    int PassedMissions : "FC3.dll", 0x01E995F8, 0x10, 0x1C, 0x50, 0x10;
+    int LiberatedGarisons : "FC3.dll", 0x01E995F8, 0xC0;
+    int PassedPredator : "FC3.dll", 0x01E995F8, 0x10, 0x1C, 0x50, 0x160;
+    int PassedHostage : "FC3.dll", 0x01E995F8, 0x10, 0x1C, 0x50, 0x150;
+    int TV : "FC3.dll", 0x01E995F8, 0x10, 0x1C, 0x10, 0x30, 0x10, 0xC4, 0x118;
+    int Notes : "FC3.dll", 0x01E995F8, 0x10, 0x1C, 0x10, 0x3C, 0x10, 0xC4, 0x120;
+    int VHS : "FC3.dll", 0x01E995F8, 0x10, 0x1C, 0x10, 0x64, 0x10, 0xC4, 0x11C;
+    int Loading : "FC3.dll", 0x01E38F8C, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3.dll", 0x01F14AE0, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3.dll", 0x01F14AE0, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
+}
+
+state("fc3_blooddragon_d3d11", "DX11 Steam (01.05.2013)")
+{
+    int PassedMissions : "FC3_d3d11.dll", 0x01EA7BA8, 0x10, 0x1C, 0x50, 0x10;
+    int LiberatedGarisons : "FC3_d3d11.dll", 0x01EA7BA8, 0xC0;
+    int PassedPredator : "FC3_d3d11.dll", 0x01EA7BA8, 0x10, 0x1C, 0x50, 0x160;
+    int PassedHostage : "FC3_d3d11.dll", 0x01EA7BA8, 0x10, 0x1C, 0x50, 0x150;
+    int TV : "FC3_d3d11.dll", 0x01EA7BA8, 0x10, 0x1C, 0x10, 0x30, 0x10, 0xC4, 0x118;
+    int Notes : "FC3_d3d11.dll", 0x01EA7BA8, 0x10, 0x1C, 0x10, 0x3C, 0x10, 0xC4, 0x120;
+    int VHS : "FC3_d3d11.dll", 0x01EA7BA8, 0x10, 0x1C, 0x10, 0x64, 0x10, 0xC4, 0x11C;
+    int Loading : "FC3_d3d11.dll", 0x01E4808C, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3_d3d11.dll", 0x01F23090, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3_d3d11.dll", 0x01F23090, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
+}
+
+state("fc3_blooddragon", "DX9 Steam (16.06.2014)")
+{
+    int PassedMissions : "FC3.dll", 0x01E47BB0, 0x10, 0x1C, 0x50, 0x10;
+    int LiberatedGarisons : "FC3.dll", 0x01E47BB0, 0xC0;
+    int PassedPredator : "FC3.dll", 0x01E47BB0, 0x10, 0x1C, 0x50, 0x160;
+    int PassedHostage : "FC3.dll", 0x01E47BB0, 0x10, 0x1C, 0x50, 0x150;
+    int TV : "FC3.dll", 0x01E47BB0, 0x10, 0x1C, 0x10, 0x30, 0x10, 0xC4, 0x118;
+    int Notes : "FC3.dll", 0x01E47BB0, 0x10, 0x1C, 0x10, 0x3C, 0x10, 0xC4, 0x120;
+    int VHS : "FC3.dll", 0x01E47BB0, 0x10, 0x1C, 0x10, 0x64, 0x10, 0xC4, 0x11C;
+    int Loading : "FC3.dll", 0x01E63A0C, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3.dll", 0x01EEE708, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3.dll", 0x01EEE708, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
+}
+
+state("fc3_blooddragon_d3d11", "DX11 Steam (16.06.2014)")
+{
+    int PassedMissions : "FC3_d3d11.dll", 0x01E55CB0, 0x10, 0x1C, 0x50, 0x10;
+    int LiberatedGarisons : "FC3_d3d11.dll", 0x01E55CB0, 0xC0;
+    int PassedPredator : "FC3_d3d11.dll", 0x01E55CB0, 0x10, 0x1C, 0x50, 0x160;
+    int PassedHostage : "FC3_d3d11.dll", 0x01E55CB0, 0x10, 0x1C, 0x50, 0x150;
+    int TV : "FC3_d3d11.dll", 0x01E55CB0, 0x10, 0x1C, 0x10, 0x30, 0x10, 0xC4, 0x118;
+    int Notes : "FC3_d3d11.dll", 0x01E55CB0, 0x10, 0x1C, 0x10, 0x3C, 0x10, 0xC4, 0x120;
+    int VHS : "FC3_d3d11.dll", 0x01E55CB0, 0x10, 0x1C, 0x10, 0x64, 0x10, 0xC4, 0x11C;
+    int Loading : "FC3_d3d11.dll", 0x01E71B0C, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3_d3d11.dll", 0x01F2C0B0, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3_d3d11.dll", 0x01F2C0B0, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
+}
+
+state("fc3_blooddragon", "DX9 Steam (13.05.2019)")
+{
+    int PassedMissions : "FC3.dll", 0x01EF7448, 0x10, 0x1C, 0x50, 0x10;
+    int LiberatedGarisons : "FC3.dll", 0x01EF7448, 0xC0;
+    int PassedPredator : "FC3.dll", 0x01EF7448, 0x10, 0x1C, 0x50, 0x160;
+    int PassedHostage : "FC3.dll", 0x01EF7448, 0x10, 0x1C, 0x50, 0x150;
+    int TV : "FC3.dll", 0x01EF7448, 0x10, 0x1C, 0x10, 0x30, 0x10, 0xC4, 0x118;
+    int Notes : "FC3.dll", 0x01EF7448, 0x10, 0x1C, 0x10, 0x3C, 0x10, 0xC4, 0x120;
+    int VHS : "FC3.dll", 0x01EF7448, 0x10, 0x1C, 0x10, 0x64, 0x10, 0xC4, 0x11C;
+    int Loading : "FC3.dll", 0x01E96F0C, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3.dll", 0x01F72950, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3.dll", 0x01F72950, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4; // TODO: DX11 Version for this, but I need to refind pointers here, because they seem to be different
+}
+
+state("fc3_blooddragon", "DX9 Steam/Connect (29.11.2021)") // I'm not sure if you can launch DX9 Connect, but if you somehow can, it has all the same addresses and MD5 as Steam version DX9, so that's might be why it does not launch?
+{
+    int PassedMissions : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x50, 0x10;
+    int LiberatedGarisons : "FC3.dll", 0x01888A10, 0xC0;
+    int PassedPredator : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x50, 0x160;
+    int PassedHostage : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x50, 0x150;
+    int TV : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x10, 0x30, 0x10, 0xC4, 0x118;
+    int Notes : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x10, 0x3C, 0x10, 0xC4, 0x120;
+    int VHS : "FC3.dll", 0x01888A10, 0x10, 0x1C, 0x10, 0x64, 0x10, 0xC4, 0x11C;
+    int Loading : "FC3.dll", 0x018435A4, 0x14, 0x30, 0x30;
+    int InACutsceneStart : "FC3.dll", 0x018D41C8, 0x4, 0x15C, 0x14, 0xBC, 0x348;
+    int InACutsceneFinal : "FC3.dll", 0x018D41C8, 0x18, 0x74, 0x14, 0x0, 0x14, 0x1C, 0x4;
+}
+
+state("fc3_blooddragon_d3d11", "DX11 Steam (29.11.2021)")
 {
     int PassedMissions : "FC3_d3d11.dll", 0x01898C50, 0x10, 0x1C, 0x50, 0x10;
     int LiberatedGarisons : "FC3_d3d11.dll", 0x01898C50, 0xC0;
@@ -40,7 +140,7 @@ state("fc3_blooddragon_d3d11", "DX11 Steam (29.11.21)")
 
 // Ubisoft Connect
 
-state("fc3_blooddragon_d3d11", "Connect (29.11.21)")   
+state("fc3_blooddragon_d3d11", "Connect DX11 (29.11.2021)")   
 {
     int PassedMissions : "FC3_d3d11.dll", 0x01EA8BA8, 0x10, 0x1C, 0x50, 0x10;
     int LiberatedGarisons : "FC3_d3d11.dll", 0x01EA8BA8, 0xC0;
@@ -170,21 +270,30 @@ startup
 
 init
 {
-    // Generate Hash for the game
-    string MD5Hash;
-    using (var md5 = System.Security.Cryptography.MD5.Create())
-    using (var s = File.Open(modules.First().FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-    MD5Hash = md5.ComputeHash(s).Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
-    print("Hash is: " + MD5Hash);
+using (FileStream gameProcess = File.Open(modules.First().FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+        string gameProcesProcessDirectory = Path.GetDirectoryName(gameProcess.Name), gameProcessName = Path.GetFileNameWithoutExtension(gameProcess.Name);
 
-    // Set game version according to hash
-    switch (MD5Hash){
-        case "7A1169F819C39ACA584AB2B8EE4A1D4E": version = "DX9 Steam (29.11.21)"; break;
-        case "A64723A58759D92F9C7B11ECE257A361": version = "DX11 Steam (29.11.21)"; break;
-        case "F9EEEB7309144276C34257C91E6C4875": version = "Connect (29.11.21)"; break;
+        using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+        using (FileStream gameProcessDLL = File.Open(gameProcesProcessDirectory + "\\" + (gameProcessName[gameProcessName.Length - 1] == '1' ? "FC3_d3d11.dll" : "FC3.dll"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+          string MD5Hash = md5.ComputeHash(gameProcessDLL).Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
+          
+          //System.Windows.Forms.Clipboard.SetDataObject(MD5Hash); uncomment if you have encontered "Unknown Version" and send to "Vlad2D" in Discord with dll files of "FC3d3d.dll" and "FC3.dll".
+          switch (MD5Hash) {
+            case "D0E7782B31CDE5E4FF57D808C202D2CF": version = "Server Fix DX9"; break;
+            case "0DAC3F3BE0793DC6C3F639A8A788D625": version = "Server Fix DX11"; break;
+            case "C6B0C3C127CBAA1108901917CF58EA13": version = "DX9 Steam (01.05.2013)"; break;
+            case "D1896F5AB8D1E386184A0E90154C6D31": version = "DX11 Steam (01.05.2013)"; break;
+            case "434A3CFC254FB4B3D8298C1081882575": version = "DX9 Steam (16.06.2014)"; break;
+            case "685CBFA8B1D49E3EDD8671C2B2D22D4B": version = "DX11 Steam (16.06.2014)"; break;
+            case "65619774266832BAB5C373DDBF2B44A1": version = "DX9 Steam (13.05.2019)"; break; // todo: DX11 test_ch
+            case "DF4FE4481AC79C61E39C24541FE3DC6F": version = "DX9 Steam/Connect (29.11.2021)"; break;
+            case "6F3BF955916CB3373FC666A71588F65E": version = "DX11 Steam (29.11.2021)"; break;
+            case "C060144AE2DC589CFAD459151B8FFF45": version = "Connect DX11 (29.11.2021)"; break;
 
-        default: version = "Unknown Version"; break;
-    }
+            default: version = "Unknown Version"; break;
+          }
+        }
+      }
 }
 
 start
