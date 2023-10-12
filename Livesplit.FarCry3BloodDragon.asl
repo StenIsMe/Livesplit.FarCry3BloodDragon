@@ -276,10 +276,10 @@ using (FileStream gameProcess = File.Open(modules.First().FileName, FileMode.Ope
         string gameProcesProcessDirectory = Path.GetDirectoryName(gameProcess.Name), gameProcessName = Path.GetFileNameWithoutExtension(gameProcess.Name);
 
         using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-        using (FileStream gameProcessDLL = File.Open(gameProcesProcessDirectory + "\\" + (gameProcessName[gameProcessName.Length - 4] == '4' ? "FC3_d3d11.dll" : "FC3.dll"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+        using (FileStream gameProcessDLL = File.Open(gameProcesProcessDirectory + "\\" + (gameProcessName[gameProcessName.Length - 1] == '1' ? "FC3_d3d11.dll" : "FC3.dll"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
           string MD5Hash = md5.ComputeHash(gameProcessDLL).Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
           
-          System.Windows.Forms.Clipboard.SetDataObject(MD5Hash);
+          // System.Windows.Forms.Clipboard.SetDataObject(MD5Hash);
           switch (MD5Hash) {
             case "D0E7782B31CDE5E4FF57D808C202D2CF": version = "Server Fix DX9"; break;
             case "0DAC3F3BE0793DC6C3F639A8A788D625": version = "Server Fix DX11"; break;
