@@ -266,6 +266,8 @@ startup
         if (mbox == DialogResult.Yes)
             timer.CurrentTimingMethod = TimingMethod.GameTime;
     }
+
+    vars.CompletedMissions = new HashSet<int>();
 }
 
 init
@@ -274,10 +276,10 @@ using (FileStream gameProcess = File.Open(modules.First().FileName, FileMode.Ope
         string gameProcesProcessDirectory = Path.GetDirectoryName(gameProcess.Name), gameProcessName = Path.GetFileNameWithoutExtension(gameProcess.Name);
 
         using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-        using (FileStream gameProcessDLL = File.Open(gameProcesProcessDirectory + "\\" + (gameProcessName[gameProcessName.Length - 1] == '1' ? "FC3_d3d11.dll" : "FC3.dll"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+        using (FileStream gameProcessDLL = File.Open(gameProcesProcessDirectory + "\\" + (gameProcessName[gameProcessName.Length - 4] == '4' ? "FC3_d3d11.dll" : "FC3.dll"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
           string MD5Hash = md5.ComputeHash(gameProcessDLL).Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
           
-          //System.Windows.Forms.Clipboard.SetDataObject(MD5Hash); uncomment if you have encontered "Unknown Version" and send to "Vlad2D" in Discord with dll files of "FC3_d3d11.dll" and "FC3.dll".
+          System.Windows.Forms.Clipboard.SetDataObject(MD5Hash);
           switch (MD5Hash) {
             case "D0E7782B31CDE5E4FF57D808C202D2CF": version = "Server Fix DX9"; break;
             case "0DAC3F3BE0793DC6C3F639A8A788D625": version = "Server Fix DX11"; break;
@@ -289,11 +291,20 @@ using (FileStream gameProcess = File.Open(modules.First().FileName, FileMode.Ope
             case "DF4FE4481AC79C61E39C24541FE3DC6F": version = "DX9 Steam/Connect (29.11.2021)"; break;
             case "6F3BF955916CB3373FC666A71588F65E": version = "DX11 Steam (29.11.2021)"; break;
             case "C060144AE2DC589CFAD459151B8FFF45": version = "Connect DX11 (29.11.2021)"; break;
+            case "916F3C605BDF546BEC63E7E8C36A71DB": version = "DX9 Steam (16.06.2014)"; break;
+            case "4698A68CB58EC138E97A5EE15EFD4E5D": version = "DX11 Steam (16.06.2014)"; break;
+            case "DEE2D3D641414C585089C4B726AD9D65": version = "DX9 Steam (16.06.2014)"; break;
+            case "601FBA2846C393B9B0FE800154FF8C52": version = "DX11 Steam (16.06.2014)"; break;
 
             default: version = "Unknown Version"; break;
           }
         }
       }
+}
+
+onStart
+{
+    vars.CompletedMissions.Clear();
 }
 
 start
@@ -308,7 +319,7 @@ split
 return
     current.PassedMissions == old.PassedMissions + 1
       && current.PassedMissions > 0 && current.PassedMissions < 7
-      && settings["mission" + current.PassedMissions]
+      && settings["mission" + current.PassedMissions] && vars.CompletedMissions.Add(current.PassedMissions)
     || old.InACutsceneFinal == 1 && current.InACutsceneFinal == 0
     && current.PassedMissions == 6 && settings["mission7"]
     || current.LiberatedGarisons == old.LiberatedGarisons + 1
