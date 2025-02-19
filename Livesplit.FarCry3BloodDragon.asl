@@ -323,22 +323,22 @@ return
     || old.InACutsceneFinal == 1 && current.InACutsceneFinal == 0
     && current.PassedMissions == 6 && settings["mission7"]
     || current.LiberatedGarisons == old.LiberatedGarisons + 1
-      && current.LiberatedGarisons > 0 && current.LiberatedGarisons < 13 && current.Loading == 0
+      && current.LiberatedGarisons > 0 && current.LiberatedGarisons <= 13 && current.Loading == 0
       && settings["garison" + current.LiberatedGarisons]
     || current.PassedPredator == old.PassedPredator + 1
-      && current.PassedPredator > 0 && current.PassedPredator < 8 && current.Loading == 0
+      && current.PassedPredator > 0 && current.PassedPredator <= 8 && current.Loading == 0
       && settings["predator" + current.PassedPredator]
     || current.PassedHostage == old.PassedHostage + 1
-      && current.PassedHostage > 0 && current.PassedHostage < 8 && current.Loading == 0
+      && current.PassedHostage > 0 && current.PassedHostage <= 8 && current.Loading == 0
       && settings["hostage" + current.PassedHostage]
     || current.TV == old.TV + 1
-      && current.TV > 0 && current.TV < 32 && current.Loading == 0
+      && current.TV > 0 && current.TV <= 32 && current.Loading == 0
       && settings["TV" + current.TV]
     || current.Notes == old.Notes + 1
-      && current.Notes > 0 && current.Notes < 10 && current.Loading == 0
+      && current.Notes > 0 && current.Notes <= 10 && current.Loading == 0
       && settings["notes" + current.Notes]
     || current.VHS == old.VHS + 1
-      && current.VHS > 0 && current.VHS < 12 && current.Loading == 0
+      && current.VHS > 0 && current.VHS <= 12 && current.Loading == 0
       && settings["VHS" + current.VHS];
 }
 
